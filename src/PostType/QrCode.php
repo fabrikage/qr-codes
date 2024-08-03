@@ -24,7 +24,9 @@ class QrCode
                 'name' => __('QR Codes', 'fabrikage'),
                 'singular_name' => __('QR Code', 'fabrikage'),
             ],
-            'public' => true,
+            'public' => false,
+            'publicly_queryable' => true,
+            'show_ui' => true,
             'has_archive' => false,
             'show_in_menu' => true,
             'show_in_nav_menus' => true,
@@ -32,6 +34,7 @@ class QrCode
             'menu_position' => 20,
             'menu_icon' => 'dashicons-admin-links',
             'supports' => ['title'],
+            'rewrite' => false
         ]);
 
         add_action('add_meta_boxes', [$this, 'addMetaBox']);
@@ -60,7 +63,7 @@ class QrCode
     public function renderMetaBox($post)
     {
         $data = get_post_meta($post->ID, 'qr_redirect_url', true);
-        ?>
+?>
 
         <style>
             .qr-wrap {
@@ -85,15 +88,15 @@ class QrCode
 
         <p><?php _e('Link in QR code', 'fabrikage'); ?>: <a href="<?php echo esc_url(self::getQrCodeUrl($post->ID)); ?>" target="_blank"><?php echo esc_url(self::getQrCodeUrl($post->ID)); ?></a></p>
         <p><?php _e('QR code image', 'fabrikage'); ?>:<br>
-            <div class="qr-wrap" style="border: 1px solid #efefef; display: inline-block;">
-                <a href="<?php echo esc_url(self::getQrCodeImageUrl($post->ID)); ?>" target="_blank">
-                    <?php echo self::getQrCodeImage($post->ID); ?>
-                </a>
-            </div>
+        <div class="qr-wrap" style="border: 1px solid #efefef; display: inline-block;">
+            <a href="<?php echo esc_url(self::getQrCodeImageUrl($post->ID)); ?>" target="_blank">
+                <?php echo self::getQrCodeImage($post->ID); ?>
+            </a>
+        </div>
         </p>
         <p><?php _e('Number of unique visits', 'fabrikage'); ?>: <?php echo self::getClicks($post->ID); ?></p>
 
-        <?php
+<?php
     }
 
     public static function getClicks($postId): int
