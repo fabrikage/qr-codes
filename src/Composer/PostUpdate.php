@@ -4,7 +4,7 @@ namespace Fabrikage\QR\Composer;
 
 use Composer\Script\Event;
 
-class PostInstall
+class PostUpdate
 {
     public static function run(Event $event)
     {

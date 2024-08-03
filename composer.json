@@ -19,8 +19,8 @@
         "chillerlan/php-qrcode": "^5.0"
     },
     "scripts": {
-        "post-install-cmd": [
-            "Fabrikage\\QR\\Composer\\PostInstall::run"
+        "post-update-cmd": [
+            "Fabrikage\\QR\\Composer\\PostUpdate::run"
         ]
     }
 }
