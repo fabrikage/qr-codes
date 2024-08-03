@@ -29,6 +29,7 @@
 namespace Fabrikage\QR;
 
 const FABRIKAGE_QR_CODES_PLUGIN_FILE = __FILE__;
+const FABRIKAGE_QR_CODES_VERSION = '{version}';
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
