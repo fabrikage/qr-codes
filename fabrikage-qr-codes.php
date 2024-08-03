@@ -4,7 +4,7 @@
  * Plugin Name: Fabrikage - QR Codes
  * Plugin URI:  https://fabrikage.nl
  * Description: QR Code generation and redirection
- * Version:     dev-main
+ * Version:     {version}
  * Author:      Fabrikage (Bart Klein Reesink)
  * Author URI:  https://fabrikage.nl
  * Text Domain: fabrikage
@@ -29,7 +29,7 @@
 namespace Fabrikage\QR;
 
 const FABRIKAGE_QR_CODES_PLUGIN_FILE = __FILE__;
-const FABRIKAGE_QR_CODES_VERSION = 'dev-main';
+const FABRIKAGE_QR_CODES_VERSION = '{version}';
 
 if (is_readable(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
