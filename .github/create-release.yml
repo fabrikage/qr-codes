@@ -1,0 +1,50 @@
+on:
+    push:
+        tags:
+            - '*.*'
+
+name: Create release
+
+jobs:
+    release:
+        name: Create release
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout
+              uses: 'actions/checkout@v3'
+            - name: Setup PHP
+              uses: 'shivammathur/setup-php@v2'
+              with:
+                  php-version: '8.2'
+            - name: Find and replace {version} in main plugin file
+              uses: jacobtomlinson/gha-find-replace@v3
+              with:
+                  include: '${{ vars.PLUGIN_NAME }}.php'
+                  find: '{version}'
+                  replace: '${{ github.ref_name }}'
+            - name: Install Composer dependencies
+              uses: 'ramsey/composer-install@v2'
+              env:
+                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.COMPOSER_AUTH }}"}}'
+              with:
+                  composer-options: '--no-dev --no-interaction --no-progress --optimize-autoloader --classmap-authoritative'
+            - name: List files
+              run: 'ls -la'
+            - name: Cleanup
+              run: |
+                  rm -rf .git .github .gitignore composer.* package.json package-lock.json TODO.md node_modules assets/scss Makefile .prettierrc
+            - name: List files
+              run: 'ls -la'
+            - name: Put all files in a directory, ignore errors
+              run: 'mkdir ${{ vars.PLUGIN_NAME }} && mv * ${{ vars.PLUGIN_NAME }} || true'
+            - name: List files
+              run: 'ls -la'
+            - name: Zip release
+              run: 'zip -r ${{ vars.PLUGIN_NAME }}-${{github.ref_name}}.zip *'
+            - name: Release
+              uses: ncipollo/release-action@v1
+              with:
+                  artifacts: '${{ vars.PLUGIN_NAME }}-${{github.ref_name}}.zip'
+                  bodyFile: '${{ vars.PLUGIN_NAME }}/CHANGELOG.md'
