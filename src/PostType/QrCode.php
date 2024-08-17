@@ -212,7 +212,7 @@ class QrCode
 
     public static function getQrCodeSvg($postId): string
     {
-        $data = self::getQrCodeData($postId);
+        $data = self::getQrCodeUrl($postId);
 
         if (empty($data)) {
             return '';
