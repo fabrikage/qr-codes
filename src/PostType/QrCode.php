@@ -2,8 +2,12 @@
 
 namespace Fabrikage\QR\PostType;
 
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\Output\QROutputInterface;
 use chillerlan\QRCode\QRCode as QRCodeGenerator;
-use chillerlan\QRCode\QROptions;
+use Fabrikage\QR\QrCode\MeltedCode;
+use Fabrikage\QR\QrCode\MeltedOutputOptions;
 
 class QrCode
 {
@@ -63,7 +67,7 @@ class QrCode
     public function renderMetaBox($post)
     {
         $data = get_post_meta($post->ID, 'qr_redirect_url', true);
-?>
+        ?>
 
         <style>
             .qr-wrap {
@@ -215,11 +219,22 @@ class QrCode
         }
 
         $qrCode = new QRCodeGenerator();
-        $options = new QROptions([
-            'imageTransparent' => true,
-            'outputBase64' => false,
-            'drawLightModules' => false,
-        ]);
+        $options = new MeltedOutputOptions();
+
+        $options->melt               = true;
+        $options->inverseMelt        = false;
+        $options->meltRadius         = 0.6;
+        $options->outputInterface    = MeltedCode::class;
+        $options->outputType         = QROutputInterface::CUSTOM;
+        $options->outputBase64       = false;
+        $options->addQuietzone       = true;
+        $options->eccLevel           = EccLevel::Q;
+        $options->connectPaths       = true;
+        $options->excludeFromConnect = [
+            QRMatrix::M_FINDER_DARK,
+            QRMatrix::M_FINDER_DOT,
+        ];
+
         $qrCode->setOptions($options);
 
         return $qrCode->render($data);
